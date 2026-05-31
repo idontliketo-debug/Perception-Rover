@@ -1,0 +1,55 @@
+bt_navigator:
+  ros__parameters:
+    use_sim_time: true
+    odom_topic: /odom
+
+controller_server:
+  ros__parameters:
+    use_sim_time: true
+    FollowPath:
+      plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
+      desired_linear_vel: 0.3
+      max_linear_vel: 0.45
+      lookahead_dist: 0.5
+      min_lookahead_dist: 0.3
+      max_lookahead_dist: 0.75
+      transform_tolerance: 0.3
+      use_cost_regulated_linear_velocity_scaling: true
+      regulated_linear_scaling_min_radius: 0.7
+      regulated_linear_scaling_min_speed: 0.08
+      min_approach_linear_velocity: 0.05
+      approach_velocity_scaling_dist: 0.75
+      use_approach_linear_velocity_scaling: true
+
+planner_server:
+  ros__parameters:
+    use_sim_time: true
+    GridBased:
+      plugin: "nav2_navfn_planner::NavfnPlanner"
+      tolerance: 0.5
+      use_astar: true
+      allow_unknown: false
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: true
+    behavior_plugins: ["spin", "backup", "wait"]
+    spin:
+      plugin: "nav2_behaviors::Spin"
+    backup:
+      plugin: "nav2_behaviors::BackUp"
+    wait:
+      plugin: "nav2_behaviors::Wait"
+    global_frame: odom
+    robot_base_frame: base_link
+    transform_tolerance: 0.3
+    max_rotational_vel: 1.0
+    min_rotational_vel: 0.4
+    rotational_acc_lim: 2.0
+
+collision_monitor:
+  ros__parameters:
+    use_sim_time: true
+    observation_sources: ""
+    base_frame_id: base_link
+    odom_frame_id: odom
